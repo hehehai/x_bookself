@@ -1,0 +1,4 @@
+@BaseUrl=http://localhost:3000
+
+### Get users
+GET {{BaseUrl}}/apis/users HTTP/1.1

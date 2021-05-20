@@ -1,0 +1,54 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique
+  password String
+  email    String?
+  status   Int     @default(0)
+
+  books Book[]
+  tags  Tag[]
+
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Book {
+  id     Int     @id @default(autoincrement())
+  name   String
+  author String
+  intro  String?
+  status Int     @default(0)
+
+  tags    Tag[]
+  owner   User  @relation(fields: [ownerId], references: [id])
+  ownerId Int
+
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([name, author])
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  books   Book[]
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId Int
+
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+}
