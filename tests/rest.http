@@ -1,4 +1,49 @@
 @BaseUrl=http://localhost:3000
 
-### Get users
-GET {{BaseUrl}}/apis/users HTTP/1.1
+### User FindMany
+GET {{BaseUrl}}/apis/users?take=10&skip=0&name=月 HTTP/1.1
+
+### User FindOne
+GET {{BaseUrl}}/apis/users/2 HTTP/1.1
+
+### User Create
+POST {{BaseUrl}}/apis/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "尚波",
+  "password": "aa123456",
+  "email": "shangbo@gmail.com",
+  "status": 1
+}
+
+### User Update
+PATCH {{BaseUrl}}/apis/users/4 HTTP/1.1
+Content-Type: application/json
+
+{
+  "password": "f123456",
+  "status": 1
+}
+
+### User Soft Delete
+PATCH {{BaseUrl}}/apis/users/delete/10 HTTP/1.1
+
+### User Delete
+Delete {{BaseUrl}}/apis/users/11 HTTP/1.1
+
+### User FindMany Book
+
+### User Create Book
+
+### User Update Book
+
+### User Delete Book
+
+### User FindMany Tag
+
+### User Create Tag
+
+### User Update Tag
+
+### User Delete Tag

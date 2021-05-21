@@ -1,23 +1,9 @@
 import { PrismaClient } from '@prisma/client'
+import { Service } from 'typedi'
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      db: PrismaClient
-    }
+@Service()
+export default class PrismaService extends PrismaClient {
+  constructor() {
+    super()
   }
 }
-
-let db: PrismaClient
-
-if (process.env.NODE_ENV === 'production') {
-  db = new PrismaClient()
-} else {
-  if (!global.db) {
-    global.db = new PrismaClient()
-  }
-
-  db = global.db
-}
-
-export default db

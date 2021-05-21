@@ -27,7 +27,7 @@ model Book {
   name   String
   author String
   intro  String?
-  status Int     @default(0)
+  status Int     @default(0) // 1 wanted, 2 reading, 3 read
 
   tags    Tag[]
   owner   User  @relation(fields: [ownerId], references: [id])

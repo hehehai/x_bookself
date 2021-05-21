@@ -15,9 +15,9 @@ const app = createKoaServer({
     credentials: true,
   },
 
-  controllers: [path.resolve(__dirname, '../src/controllers/*.ts')],
+  controllers: [path.resolve(__dirname, '../src/controllers/**/*.controller.ts')],
   middlewares: [path.resolve(__dirname, '../src/middlewares/*.ts')],
-  interceptors: [path.resolve(__dirname, '../src/interceptors/*.ts')],
+  interceptors: [path.resolve(__dirname, '../src/interceptors/**/*.service.ts')],
 
   // router prefix
   // e.g. api => http://hostname:port/{routePrefix}/{controller.method}
