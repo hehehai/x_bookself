@@ -1,10 +1,15 @@
 import { Service } from 'typedi'
 import PrismaService from '@db/client'
 import { Prisma, User } from '@prisma/client'
+import { PasswordService } from '@app/helpers/password.service'
+import { transformStringFieldUpdateInput } from '@app/helpers/utils'
 
 @Service()
 export class UserService {
-  constructor(protected readonly prisma: PrismaService) {}
+  constructor(
+    protected readonly prisma: PrismaService,
+    protected readonly passwordService: PasswordService,
+  ) {}
 
   async count<T extends Prisma.UserFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.UserFindManyArgs>,
@@ -30,7 +35,7 @@ export class UserService {
 
       data: {
         ...args.data,
-        password: args.data.password,
+        password: await this.passwordService.hash(args.data.password),
       },
     })
   }
@@ -43,7 +48,11 @@ export class UserService {
       data: {
         ...args.data,
 
-        password: args.data.password,
+        password:
+          args.data.password &&
+          (await transformStringFieldUpdateInput(args.data.password, password =>
+            this.passwordService.hash(password),
+          )),
       },
     })
   }
