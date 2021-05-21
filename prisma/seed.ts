@@ -14,7 +14,7 @@ async function insertUsers(db: PrismaClient) {
   const users: Array<Prisma.UserCreateInput> = [
     {
       name: '李小田',
-      password: 'ff89102',
+      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
       books: {
         create: [
           {
@@ -32,7 +32,7 @@ async function insertUsers(db: PrismaClient) {
     },
     {
       name: '望月',
-      password: 'ff89102',
+      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
       books: {
         create: [
           {
@@ -45,7 +45,7 @@ async function insertUsers(db: PrismaClient) {
     },
     {
       name: '子行',
-      password: 'ff89102',
+      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
       books: {
         create: [
           {
@@ -63,7 +63,7 @@ async function insertUsers(db: PrismaClient) {
     },
     {
       name: '宁瑾',
-      password: 'ff89102',
+      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
       books: {
         create: [
           {
@@ -81,7 +81,7 @@ async function insertUsers(db: PrismaClient) {
     },
     {
       name: '泽高',
-      password: 'ff89102',
+      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
       books: {
         create: [
           {
@@ -99,7 +99,7 @@ async function insertUsers(db: PrismaClient) {
     },
     {
       name: '清风徐来',
-      password: 'ff89102',
+      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
       books: {
         create: [
           {
@@ -112,7 +112,7 @@ async function insertUsers(db: PrismaClient) {
     },
     {
       name: '翁小飞',
-      password: 'ff89102',
+      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
     },
   ]
 
