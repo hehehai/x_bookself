@@ -1,0 +1,54 @@
+Table user {
+  id integer [pk, increment]
+  name varchar [unique]
+  password varchar [not null]
+  email varchar
+  status integer [not null, default: 0]
+
+  createdAt timestamp [default: `now()`]
+  updatedAt timestamp
+  deletedAt timestamp
+}
+
+Table book {
+  id integer [pk, increment]
+  name varchar [not null]
+  author varchar [not null]
+  intro text
+  status integer [not null, default: 0]
+
+  ownerId integer
+
+  createdAt timestamp [default: `now()`]
+  updatedAt timestamp
+  deletedAt timestamp
+
+  indexes {
+    name [name: 'name_idx', note: 'name index']
+  }
+}
+
+Table tag {
+  id integer [pk, increment]
+  name varchar [not null]
+
+  ownerId integer
+
+  createdAt timestamp [default: `now()`]
+  updatedAt timestamp
+  deletedAt timestamp
+}
+
+Table book_tag {
+  bookId integer
+  tagId integer
+
+  indexes {
+    (bookId, tagId) [pk]
+  }
+}
+
+Ref: book.ownerId > user.id // many-to-one
+Ref: tag.ownerId > user.id // many-to-one
+Ref: book_tag.bookId > book.id // many-to-one
+Ref: book_tag.tagId > tag.id // many-to-one
