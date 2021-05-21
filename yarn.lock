@@ -750,6 +750,11 @@
     "@types/koa-compose" "*"
     "@types/node" "*"
 
+"@types/lodash@^4.14.169":
+  version "4.14.169"
+  resolved "https://registry.nlark.com/@types/lodash/download/@types/lodash-4.14.169.tgz?cache=0&sync_timestamp=1620802972438&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Flodash%2Fdownload%2F%40types%2Flodash-4.14.169.tgz#83c217688f07a4d9ef8f28a3ebd1d318f6ff4cbb"
+  integrity sha1-g8IXaI8HpNnvjyij69HTGPb/TLs=
+
 "@types/mime@*":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.2.tgz#857a118d8634c84bba7ae14088e4508490cd5da5"
@@ -3400,10 +3405,10 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
-lodash@4.x, lodash@^4.17.19:
+lodash@4.x, lodash@^4.17.19, lodash@^4.17.21:
   version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+  resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha1-Z5WRxWTDv/quhFTPCz3zcMPWkRw=
 
 lodash@^4.17.13:
   version "4.17.19"
