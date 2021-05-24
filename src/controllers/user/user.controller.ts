@@ -1,10 +1,12 @@
 import { User } from '@prisma/client'
 import { isUndefined } from 'lodash'
 import {
+  Authorized,
   Body,
   Delete,
   Get,
   JsonController,
+  NotFoundError,
   Params,
   Patch,
   Post,
@@ -23,6 +25,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post('/')
+  @Authorized()
   async create(@Body() data: UserCreateInput): Promise<User> {
     return this.userService.create({
       data: data,
@@ -33,6 +36,7 @@ export class UserController {
   }
 
   @Get('/')
+  @Authorized('user:findMany')
   async findMany(@QueryParams() params: UserFindManyArgs): Promise<User[]> {
     return this.userService.findMany({
       where: {
@@ -72,7 +76,7 @@ export class UserController {
       },
     })
     if (!result) {
-      throw new Error('Not Found')
+      throw new NotFoundError('User Not Found')
     }
 
     return result
