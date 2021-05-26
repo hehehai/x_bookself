@@ -14,8 +14,9 @@ model User {
   email    String?
   status   Int     @default(0) // 0 未激活，1 正常，2 封禁
 
-  books Book[]
-  tags  Tag[]
+  books      Book[]
+  tags       Tag[]
+  MailRecord MailRecord[]
 
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
@@ -51,4 +52,21 @@ model Tag {
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
   deletedAt DateTime?
+}
+
+model MailRecord {
+  id      Int     @id @default(autoincrement())
+  from    String
+  to      String
+  type    Int     @default(0) // 0 推广, 1 验证码
+  subject String?
+  code    String?
+
+  receiver   User @relation(fields: [receiverId], references: [id])
+  receiverId Int
+
+  expirationAt DateTime?
+  createdAt    DateTime  @default(now())
+  updateAt     DateTime  @updatedAt
+  deletedAt    DateTime?
 }

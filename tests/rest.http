@@ -33,7 +33,7 @@ PATCH {{BaseUrl}}/apis/users/delete/10 HTTP/1.1
 ### User Delete
 Delete {{BaseUrl}}/apis/users/11 HTTP/1.1
 
-### user register
+### User register
 POST {{BaseUrl}}/apis/auth/register HTTP/1.1
 Content-Type: application/json
 
@@ -42,13 +42,33 @@ Content-Type: application/json
   "password": "dd254618"
 }
 
-### user login
+### User login
 POST {{BaseUrl}}/apis/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
   "name": "李小灯",
   "password": "dd254618"
+}
+
+### User verify email send
+POST {{BaseUrl}}/apis/mail/verify HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "bijiasuo1177@163.com",
+  "name": "泽高"
+}
+
+### User forget password
+POST {{BaseUrl}}/apis/auth/forget-password HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "bijiasuo1177@163.com",
+  "name": "泽高",
+  "code": "927309",
+  "password": "pp123456"
 }
 
 ### User FindMany Book
@@ -66,3 +86,6 @@ Content-Type: application/json
 ### User Update Tag
 
 ### User Delete Tag
+
+### Mail Records Find Mnay
+GET {{BaseUrl}}/apis/mail-records/ HTTP/1.1
