@@ -21,3 +21,8 @@ export interface MailVerifyData {
   email: string
   code: string
 }
+
+export interface JwtPayInfo {
+  id: number
+  name: string
+}

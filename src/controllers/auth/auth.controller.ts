@@ -1,6 +1,7 @@
 import Environment from '@app/configs/environments'
+import { JwtPayInfo } from '@app/helpers/interface'
 import { MailerService } from '@app/helpers/mailer.service'
-import { PasswordService } from '@app/helpers/password.service'
+import { AuthService } from '@app/services/auth.service'
 import { UserService } from '@app/services/user.service'
 import { User } from '@prisma/client'
 import { sign } from 'jsonwebtoken'
@@ -21,7 +22,7 @@ import { RegisterInput } from './dto/register.dto'
 export class AuthController {
   constructor(
     private userService: UserService,
-    private passwordService: PasswordService,
+    private authService: AuthService,
     private mailerService: MailerService,
   ) {}
 
@@ -42,19 +43,14 @@ export class AuthController {
   // 登录
   @Post('/login')
   async login(@Body() data: LoginInput): Promise<string> {
-    const user = await this.userService.findOne({
-      where: { name: data.name },
-      select: { id: true, name: true, password: true },
-    })
-    if (!user) {
-      throw new NotFoundError('User not found')
+    const user = await this.authService.validateUser(data.name, data.password)
+
+    const payInfo: JwtPayInfo = {
+      id: user.id,
+      name: user.name,
     }
 
-    if (!this.passwordService.compare(data.password, user.password)) {
-      throw new BadRequestError('User password not match')
-    }
-
-    return sign({ id: user.id, name: user.name }, Environment.JWT_PRIVATE_KEY, {
+    return sign(payInfo, Environment.JWT_PRIVATE_KEY, {
       expiresIn: '1h',
     })
   }
