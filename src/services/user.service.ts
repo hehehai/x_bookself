@@ -3,6 +3,10 @@ import PrismaService from '@db/client'
 import { Prisma, User } from '@prisma/client'
 import { PasswordService } from '@app/helpers/password.service'
 import { transformStringFieldUpdateInput } from '@app/helpers/utils'
+import { JwtPayInfo } from '@app/helpers/interface'
+import Environment from '@app/configs/environments'
+import { JsonWebTokenError, TokenExpiredError, verify } from 'jsonwebtoken'
+import { UnauthorizedError } from 'routing-controllers'
 
 @Service()
 export class UserService {
@@ -27,6 +31,12 @@ export class UserService {
     args: Prisma.SelectSubset<T, Prisma.UserFindUniqueArgs>,
   ): Promise<User | null> {
     return this.prisma.user.findUnique(args)
+  }
+
+  async findFirst<T extends Prisma.UserFindFirstArgs>(
+    args: Prisma.SelectSubset<T, Prisma.UserFindFirstArgs>,
+  ): Promise<User | null> {
+    return this.prisma.user.findFirst(args)
   }
 
   async create<T extends Prisma.UserCreateArgs>(
@@ -64,5 +74,23 @@ export class UserService {
     args: Prisma.SelectSubset<T, Prisma.UserDeleteArgs>,
   ): Promise<User> {
     return this.prisma.user.delete(args)
+  }
+
+  async findOneByToken(token: string): Promise<User | null> {
+    try {
+      const tokenPayInfo = verify(
+        token.replace('Bearer ', ''),
+        Environment.JWT_PRIVATE_KEY,
+      ) as JwtPayInfo
+
+      return this.findOne({ where: { id: tokenPayInfo.id } })
+    } catch (err) {
+      if (err instanceof TokenExpiredError) {
+        throw new UnauthorizedError('token expired')
+      } else if (err instanceof JsonWebTokenError) {
+        throw new UnauthorizedError('token error')
+      }
+      return null
+    }
   }
 }

@@ -25,7 +25,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post('/')
-  @Authorized()
+  @Authorized('user:create')
   async create(@Body() data: UserCreateInput): Promise<User> {
     return this.userService.create({
       data: data,
@@ -62,6 +62,7 @@ export class UserController {
   }
 
   @Get('/:id')
+  @Authorized('user:findOne')
   async findOne(@Params() prams: UserFindUniqueArgs): Promise<User> {
     const result = await this.userService.findOne({
       where: prams,
@@ -83,6 +84,7 @@ export class UserController {
   }
 
   @Patch('/:id')
+  @Authorized('user:update')
   async update(
     @Params() params: UserFindUniqueArgs,
     @Body() data: UserUpdateInput,
@@ -97,6 +99,7 @@ export class UserController {
   }
 
   @Patch('/delete/:id')
+  @Authorized('user:remove')
   async softDelete(@Params() params: UserFindUniqueArgs): Promise<User> {
     return this.userService.update({
       where: params,
@@ -108,6 +111,7 @@ export class UserController {
   }
 
   @Delete('/:id')
+  @Authorized('user:delete')
   async delete(@Params() params: UserFindUniqueArgs): Promise<User> {
     return this.userService.delete({ where: params, select: { id: true } })
   }

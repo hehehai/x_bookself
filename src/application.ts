@@ -1,11 +1,9 @@
 import 'reflect-metadata'
+import path from 'path'
 import { Context } from 'koa'
 import { Container } from 'typedi'
 import { useContainer, createKoaServer, Action } from 'routing-controllers'
-
-import path from 'path'
-import { verify } from 'jsonwebtoken'
-import Environment from './configs/environments'
+import { UserService } from './services/user.service'
 
 useContainer(Container)
 
@@ -37,18 +35,17 @@ const app = createKoaServer({
     // 验证函数返回 true/false
     const token = action.request.headers['authorization']
 
-    // verify token
-    const tokenPayInfo = verify(token.replace('Bearer ', ''), Environment.JWT_PRIVATE_KEY)
+    const userService = Container.get(UserService)
+    const user = await userService.findOneByToken(token)
 
-    console.log(tokenPayInfo)
+    // verify user role and controller role permissions
 
-    // token字符串是否合法
-    // token 是否过期
-    // 用户有效性校验
-    // 挂载状态【用户，用户角色】
-    console.log(roles)
-
-    return true
+    return !!user
+  },
+  currentUserChecker: async (action: Action) => {
+    const token = action.request.headers['authorization']
+    const userService = Container.get(UserService)
+    return userService.findOneByToken(token)
   },
 })
 
