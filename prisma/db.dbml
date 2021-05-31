@@ -10,6 +10,63 @@ Table user {
   deletedAt timestamp
 }
 
+Table role {
+  id integer [pk, increment]
+  code varchar
+  name varchar [not null]
+  parentId integer [default: 0]
+
+  createdAt timestamp [default: `now()`]
+  updatedAt timestamp
+  deletedAt timestamp
+
+  indexes {
+    (code) [unique]
+  }
+}
+
+Ref: role.parentId > role.id
+
+Table user_role {
+  id integer [pk, increment]
+  userId integer [not null]
+  roleId integer [not null]
+
+  indexes {
+    (userId, roleId) [unique]
+  }
+}
+
+Ref: user_role.userId > user.id // many-to-one
+Ref: user_role.roleId > role.id // many-to-one
+
+Table permis {
+  id integer [pk, increment]
+  code varchar
+  name varchar
+
+  createdAt timestamp [default: `now()`]
+  updatedAt timestamp
+  deletedAt timestamp
+
+  indexes {
+    (code) [unique]
+  }
+}
+
+Table role_permis {
+  id integer [pk, increment]
+  roleId integer
+  permisId integer
+
+  indexes {
+    (roleId, permisId) [unique]
+  }
+}
+
+Ref: role_permis.roleId > role.id // many-to-one
+Ref: role_permis.permisId > permis.id // many-to-one
+
 Table book {
   id integer [pk, increment]
   name varchar [not null]
@@ -52,3 +109,21 @@ Ref: book.ownerId > user.id // many-to-one
 Ref: tag.ownerId > user.id // many-to-one
 Ref: book_tag.bookId > book.id // many-to-one
 Ref: book_tag.tagId > tag.id // many-to-one
+
+Table mailRecord {
+  id integer [pk, increment]
+  from varchar [not null]
+  to  varchar [not null]
+  type integer [not null, default: 0, note: '0 推广, 1 验证码']
+  subject varchar
+  code varchar
+
+  receiverId integer
+
+  expirationAt timestamp
+  createdAt timestamp [default: `now()`]
+  updatedAt timestamp
+  deletedAt timestamp
+}
+
+Ref: mailRecord.receiverId > user.id // many-to-one

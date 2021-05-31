@@ -14,9 +14,40 @@ model User {
   email    String?
   status   Int     @default(0) // 0 未激活，1 正常，2 封禁
 
+  roles      Role[]
   books      Book[]
   tags       Tag[]
   MailRecord MailRecord[]
+
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+  name String
+
+  parent     Role         @relation("RoleToRole", fields: [roleId], references: [id])
+  Role       Role[]       @relation("RoleToRole")
+  roleId     Int
+  User       User?        @relation(fields: [userId], references: [id])
+  userId     Int?
+  permission Permission[]
+
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Permission {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+  name String
+
+  Role   Role? @relation(fields: [roleId], references: [id])
+  roleId Int?
 
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
