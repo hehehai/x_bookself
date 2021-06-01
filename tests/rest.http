@@ -2,7 +2,7 @@
 @authToken=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsIm5hbWUiOiLmnY7lsI_nga8iLCJpYXQiOjE2MjE4Mjc3NjcsImV4cCI6MTYyMTgzMTM2N30.jbzZ7HdzU4X8aGOJV-wmgR43cpxoMrL8-2NZ8pp9o6c
 
 ### User FindMany
-GET {{BaseUrl}}/apis/users?take=10&skip=0&name=月 HTTP/1.1
+GET {{BaseUrl}}/apis/users?take=10&skip=0 HTTP/1.1
 Authorization: {{authToken}}
 
 ### User FindOne

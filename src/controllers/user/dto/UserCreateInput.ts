@@ -17,4 +17,7 @@ export class UserCreateInput {
   @IsInt()
   @IsIn([1, 2])
   status?: number
+
+  @IsOptional()
+  role?: string[]
 }

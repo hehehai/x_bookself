@@ -1,7 +1,6 @@
 import { User } from '@prisma/client'
 import { isUndefined } from 'lodash'
 import {
-  Authorized,
   Body,
   Delete,
   Get,
@@ -25,10 +24,9 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post('/')
-  @Authorized('user:create')
   async create(@Body() data: UserCreateInput): Promise<User> {
     return this.userService.create({
-      data: data,
+      data: { ...data, roles: { connect: [{ code: 'user' }] } },
       select: {
         id: true,
       },
@@ -36,7 +34,6 @@ export class UserController {
   }
 
   @Get('/')
-  @Authorized('user:findMany')
   async findMany(@QueryParams() params: UserFindManyArgs): Promise<User[]> {
     return this.userService.findMany({
       where: {
@@ -57,12 +54,16 @@ export class UserController {
         createdAt: true,
         updateAt: true,
         deletedAt: true,
+        roles: {
+          select: {
+            id: true,
+          },
+        },
       },
     })
   }
 
   @Get('/:id')
-  @Authorized('user:findOne')
   async findOne(@Params() prams: UserFindUniqueArgs): Promise<User> {
     const result = await this.userService.findOne({
       where: prams,
@@ -74,6 +75,11 @@ export class UserController {
         createdAt: true,
         updateAt: true,
         deletedAt: true,
+        roles: {
+          select: {
+            id: true,
+          },
+        },
       },
     })
     if (!result) {
@@ -84,7 +90,6 @@ export class UserController {
   }
 
   @Patch('/:id')
-  @Authorized('user:update')
   async update(
     @Params() params: UserFindUniqueArgs,
     @Body() data: UserUpdateInput,
@@ -99,7 +104,6 @@ export class UserController {
   }
 
   @Patch('/delete/:id')
-  @Authorized('user:remove')
   async softDelete(@Params() params: UserFindUniqueArgs): Promise<User> {
     return this.userService.update({
       where: params,
@@ -111,7 +115,6 @@ export class UserController {
   }
 
   @Delete('/:id')
-  @Authorized('user:delete')
   async delete(@Params() params: UserFindUniqueArgs): Promise<User> {
     return this.userService.delete({ where: params, select: { id: true } })
   }
@@ -129,4 +132,7 @@ export class UserController {
   // update tag
   // soft delete tag
   // delete tag
+
+  // find user roles
+  // find user permissions
 }

@@ -1,9 +1,12 @@
 import { Prisma, PrismaClient } from '@prisma/client'
+import { genSalt, hash } from 'bcrypt'
+import faker from 'faker'
 
 async function seeds() {
   console.info('Seeding database...')
   const db = new PrismaClient()
 
+  // create user
   await insertUsers(db)
 
   await db.$disconnect()
@@ -11,108 +14,106 @@ async function seeds() {
 }
 
 async function insertUsers(db: PrismaClient) {
+  const salt = await genSalt(10)
+  const passwordStr = 'dd123123'
+  const passwordHash = await hash(passwordStr, salt)
+  const email = 'bijiasuo1177@163.com'
+
+  // create role
+  // create permission
+  // create books
+  // create book tag
   const users: Array<Prisma.UserCreateInput> = [
     {
-      name: '李小田',
-      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
+      name: faker.name.gender(),
+      password: passwordHash,
+      email,
+      status: 1,
       books: {
+        create: genBooks(3),
+      },
+      roles: {
         create: [
           {
-            name: '大地之上',
-            author: '罗欣顿·米斯特里',
-            status: 2,
-          },
-          {
-            name: '乌合之众',
-            author: '古斯塔夫.勒庞',
-            status: 2,
+            code: 'user',
+            name: '用户',
+            permission: {
+              create: [
+                {
+                  code: 'profile:read',
+                  name: '个人信息',
+                  resource: 'profile',
+                  action: 'read:own',
+                  attributes: '*',
+                },
+                {
+                  code: 'profile:update',
+                  name: '修改个人信息',
+                  resource: 'profile',
+                  action: 'update:own',
+                  attributes: '*',
+                },
+                {
+                  code: 'book:create',
+                  name: '创建书籍',
+                  resource: 'book',
+                  action: 'create:own',
+                  attributes: '*',
+                },
+                {
+                  code: 'book:read',
+                  name: '查看书籍',
+                  resource: 'book',
+                  action: 'read:own',
+                  attributes: '*',
+                },
+                {
+                  code: 'book:update',
+                  name: '编辑书籍',
+                  resource: 'book',
+                  action: 'update:own',
+                  attributes: '*',
+                },
+                {
+                  code: 'book:delete',
+                  name: '删除书籍',
+                  resource: 'book',
+                  action: 'delete:own',
+                  attributes: '*',
+                },
+              ],
+            },
           },
         ],
       },
     },
     {
-      name: '望月',
-      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
+      name: faker.name.gender(),
+      password: passwordHash,
+      email,
+      status: 1,
       books: {
+        create: genBooks(3),
+      },
+      roles: {
         create: [
           {
-            name: '夜晚的潜水艇',
-            author: '陈春成',
-            status: 2,
+            code: 'admin',
+            name: '管理',
+            permission: {
+              create: [
+                {
+                  code: 'super',
+                  name: '超级权限',
+                  resource: '*',
+                  action: '*',
+                  attributes: '*',
+                },
+              ],
+            },
           },
         ],
       },
-    },
-    {
-      name: '子行',
-      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
-      books: {
-        create: [
-          {
-            name: '回归故里',
-            author: '迪迪埃·埃里蓬',
-            status: 3,
-          },
-          {
-            name: '烧纸',
-            author: '李沧东',
-            status: 1,
-          },
-        ],
-      },
-    },
-    {
-      name: '宁瑾',
-      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
-      books: {
-        create: [
-          {
-            name: '走出唯一真理观',
-            author: '陈嘉映',
-            status: 1,
-          },
-          {
-            name: '碎片',
-            author: '埃莱娜·费兰特',
-            status: 2,
-          },
-        ],
-      },
-    },
-    {
-      name: '泽高',
-      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
-      books: {
-        create: [
-          {
-            name: '失落的卫星',
-            author: '刘子超',
-            status: 2,
-          },
-          {
-            name: '银河系边缘的小失常',
-            author: '埃特加·凯雷特',
-            status: 3,
-          },
-        ],
-      },
-    },
-    {
-      name: '清风徐来',
-      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
-      books: {
-        create: [
-          {
-            name: '文化失忆',
-            author: '克莱夫·詹姆斯',
-            status: 1,
-          },
-        ],
-      },
-    },
-    {
-      name: '翁小飞',
-      password: '$2b$10$WlEJZpvqoQdJ/NaYHq0//ONs4MT9LKXHKKoBn8fhLguBk97UpvlHO',
     },
   ]
 
@@ -123,9 +124,22 @@ async function insertUsers(db: PrismaClient) {
   await Promise.all(insertFns)
 }
 
-try {
-  seeds()
-} catch (err) {
-  console.error('Seeded Error', err)
-  process.exit(1)
+async function run() {
+  try {
+    await seeds()
+  } catch (err) {
+    console.error('Seeded Error', err)
+    process.exit(1)
+  }
+}
+
+run()
+
+// ---------------------
+function genBooks(num = 1): Prisma.BookCreateWithoutOwnerInput[] {
+  const books: Prisma.BookCreateWithoutOwnerInput[] = Array(num)
+  return books.fill({
+    name: faker.lorem.words(),
+    author: faker.name.gender(),
+  })
 }
